@@ -44,6 +44,13 @@ export const GameMachine = createMachine({
                 target: GameStates.LOBBY
             }
         }
+     },
+     [GameStates.DRAW]:{
+        on:{
+            restart:{
+                target:GameStates.LOBBY
+            }
+        }
      }
 
 }

@@ -1,3 +1,4 @@
+import { freePositionY } from '../func/game'
 import {GameContext, GameEvent, GameEvents, GameGuard, PlayerColor} from '../types'
 
 
@@ -21,8 +22,22 @@ export const canChooseColorGuard: GameGuard<"chooseColor"> = (context,event) => 
 
 }
 
-export const canStartGame:GameGuard<"start"> = (context,event) => {
+export const canStartGameGuard:GameGuard<"start"> = (context,event) => {
 
-     return context.players.filter(p=> p.color).length === 2
+     return context.players.filter(p => p.color).length === 2
+
+}
+
+export const canStartGame: GameGuard<"start"> = (context,event) => {
+     return context.players.filter(p => p.color).length === 2
+}
+
+export const canDropGuard : GameGuard<"dropToken"> = (context,event) => {
+
+     
+     return event.x < context.grid[0].length && 
+     event.x >= 0 && context.currentPlayer === event.playerId && 
+     freePositionY(context.grid,event.x) >= 0
+
 
 }

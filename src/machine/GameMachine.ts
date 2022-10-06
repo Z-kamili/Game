@@ -2,7 +2,7 @@ import {createMachine} from 'xstate';
 import {createModel} from 'xstate/lib/model'
 import { GridState, Player, PlayerColor } from '../types';
 import { joinGameAction } from './actions';
-import { canJoinGuard } from './guards';
+import { canJoinGuard, canLeaveGuard } from './guards';
 
 enum GameStates {
 
@@ -57,6 +57,8 @@ export const GameMachine = createMachine({
                     target: GameStates.LOBBY,
                 },
                 leave : {
+                    cond:canLeaveGuard,
+                    // actions:[GameModel.assign()],
                     target : GameStates.LOBBY
                 },
                 chooseColor: {

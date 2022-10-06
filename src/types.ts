@@ -27,5 +27,10 @@ export type GameGuard<T extends GameEvents["type"]> = (
     
 ) => boolean
 
+export type GameAction<T extends GameEvents["type"]> = (
 
+    context: GameContext,
+    event: GameEvent<T>
+    
+) => Partial<GameContext>
 

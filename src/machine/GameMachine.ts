@@ -1,4 +1,7 @@
 import {createMachine} from 'xstate';
+import {createModel} from 'xstate/lib/model'
+import { GridState, Player, PlayerColor } from '../types';
+import { canJoinGuard } from './guards';
 
 enum GameStates {
 
@@ -9,16 +12,47 @@ enum GameStates {
 
 }
  
+
+export const GameModel = createModel({
+
+    players: [] as Player[],
+    currentPlayer: null as null | Player['id'],
+    rowLength:4,
+    grid : [
+        ["E","E","E","E","E","E","E"],
+        ["E","E","E","E","E","E","E"],
+        ["E","E","E","E","E","E","E"],
+        ["E","E","E","E","E","E","E"],
+        ["E","E","E","E","E","E","E"]
+    ] as GridState
+
+} , {
+    events : {
+
+        join:(playerId:Player["id"],name:Player["name"]) => ({playerId,name}),
+        leave:(playerId:Player['id']) => ({playerId}),
+        chooseColor:(playerId:Player['id'],color:PlayerColor) => ({playerId,color}),
+        start:(playerId:Player["id"],x:number) => ({playerId,x}),
+        dropToken:(playerId:Player["id"],x:number) => ({playerId,x}),
+        restart: (playerId:Player["id"]) => ({playerId}),
+        
+    }
+}
+) 
+
 export const GameMachine = createMachine({
 
    // etats management 
+
      id: 'game',
+     context:GameModel.initialContext,
      initial: GameStates.LOBBY,
      states : {
         [GameStates.LOBBY] : {
             on : {
                 join : {
-                    target: GameStates.LOBBY
+                    cond:canJoinGuard,
+                    target: GameStates.LOBBY,
                 },
                 leave : {
                     target : GameStates.LOBBY
@@ -34,7 +68,7 @@ export const GameMachine = createMachine({
      [GameStates.PLAY] : {
         on : {
             dropToken:{
-                target:'???'
+                target:GameStates.VICTORY
             }
         }
      },
@@ -45,7 +79,7 @@ export const GameMachine = createMachine({
             }
         }
      },
-     [GameStates.DRAW]:{
+     [GameStates.DRAW]:   {
         on:{
             restart:{
                 target:GameStates.LOBBY

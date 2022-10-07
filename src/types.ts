@@ -2,20 +2,27 @@ import { ContextFrom, EventFrom } from "xstate"
 import { GameModel } from "./machine/GameMachine"
 
 export enum PlayerColor {
-    RED = "red",
-    YELLOW = 'yellow',
+    RED = "R",
+    YELLOW = 'Y',
 }
 
 export type Player = {
-
     id:string,
     name:string,
     color?:PlayerColor
+}
+
+export enum GameStates {
+
+    LOBBY = 'LOBBY',
+    PLAY = 'PLAY',
+    VICTORY = 'VICTORY',
+    DRAW = 'DRAW'
 
 }
 
 export type CellEmpty = 'E'
-export type CellState = PlayerColor.RED | PlayerColor.YELLOW | CellEmpty
+export type CellState = "R" | "Y" | PlayerColor.RED  | PlayerColor.YELLOW | CellEmpty
 export type GridState = CellState[][]
 export type GameContext = ContextFrom<typeof GameModel>
 export type GameEvents = EventFrom<typeof GameModel>

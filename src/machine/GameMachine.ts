@@ -17,6 +17,7 @@ export const GameModel = createModel(
         ["E","E","E","E","E","E","E"],
         ["E","E","E","E","E","E","E"],
         ["E","E","E","E","E","E","E"],
+        ["E","E","E","E","E","E","E"],
         ["E","E","E","E","E","E","E"]
     ] as GridState
 
